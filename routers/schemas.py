@@ -11,3 +11,4 @@ class UserDisplay(BaseModel):
     password: str
     class Config:
         orm_mode=True
+        
