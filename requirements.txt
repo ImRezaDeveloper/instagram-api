@@ -3,3 +3,5 @@ uvicorn
 sqlalchemy
 passlib
 bcrypt==4.3.0
+aiofiles
+python-multipart
