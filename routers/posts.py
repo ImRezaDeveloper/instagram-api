@@ -4,23 +4,25 @@ from db.database import get_db
 from routers.schemas import PostDisplay, PostBase
 from db.db_post import create_post, get_all_posts
 import shutil, os
+from auth.oAuth2 import get_current_user
+from routers.schemas import UserAuth
 
 router = APIRouter(prefix='/posts', tags=['posts'])
 
 image_url_types = ['relative', 'absolute']
 
 @router.post('/', response_model=PostDisplay)
-def bulid_post(request: PostBase, db: Session = Depends(get_db)):
+def bulid_post(request: PostBase, db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
     if not request.image_url_type in image_url_types:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail='Parameter image_url_type can only take a values relative or absolute')
     return create_post(db, request)
 
 @router.get('/posts')
-def get_posts(db: Session = Depends(get_db)):
+def get_posts(db: Session = Depends(get_db), current_user: UserAuth = Depends(get_current_user)):
     return get_all_posts(db)
 
 @router.post('/upload')
-def upload_image(image: UploadFile = File(...)):
+def upload_image(image: UploadFile = File(...), current_user: UserAuth = Depends(get_current_user)):
     upload_dir = "images"
     os.makedirs(upload_dir, exist_ok=True)
 
