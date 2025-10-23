@@ -17,9 +17,11 @@ class DBpost(Base):
     image_url_type = Column(String)
     caption = Column(String)
     timestamp = Column(DateTime)
-    user_id = Column(Integer, ForeignKey('users.id'))  # 🔧 اینجا درست شد
+    user_id = Column(Integer, ForeignKey('users.id'))
+
     user = relationship('DBuser', back_populates='items')
     comments = relationship('DBcomment', back_populates='post')
+
 
 class DBcomment(Base):
     __tablename__ = 'comments'
@@ -28,5 +30,6 @@ class DBcomment(Base):
     username = Column(String)
     timestamp = Column(DateTime)
     post_id = Column(Integer, ForeignKey('posts.id'))
+
     post = relationship('DBpost', back_populates='comments')
     
